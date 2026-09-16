@@ -42,6 +42,15 @@ AGE_BANDS: Final[tuple[str, ...]] = (
 )
 SEX_CODES: Final[tuple[str, ...]] = ("f", "m", "t")  # female, male, total
 
+# Every combination above is checked for existence, but only these are downloaded.
+DOWNLOAD_SEX_CODES: Final[tuple[str, ...]] = ("f", "m")
+
+# Parallel transfer settings. Measured single-stream throughput to data.worldpop.org
+# was ~89 KB/s; eight concurrent streams reached ~562 KB/s, so the download is
+# parallelised. Without this, 200 files would take roughly an hour.
+MAX_DOWNLOAD_WORKERS: Final[int] = 8
+REQUEST_TIMEOUT_SECONDS: Final[int] = 60
+
 GADM_URL: Final[str] = (
     "https://geodata.ucdavis.edu/gadm/gadm4.1/json/gadm41_KEN_2.json.zip"
 )
@@ -68,19 +77,23 @@ CSV_COLUMNS: Final[tuple[str, ...]] = (
 # These are unset on purpose. Each one changes what the pipeline produces, so each
 # is a decision for the author to make before Stage 2 writes any real code.
 
-# Which GADM field is the "county" of the output CSV? The bundled gadm41_KEN_2.json
-# has 300 features of TYPE_2 "Constituency"; the 47 counties are the NAME_1 field.
-# Set to "NAME_1" to dissolve to 47 counties, or "NAME_2" to keep 300 units.
-COUNTY_NAME_FIELD: Final[str | None] = None
+# DECIDED (Stage 2): the output CSV reports the 47 counties, which are GADM's NAME_1
+# field. The bundled gadm41_KEN_2.json holds 300 features of TYPE_2 "Constituency",
+# so aggregation dissolves level-2 polygons up to NAME_1. This follows the spec's
+# "all 47 counties" and its "county" column name rather than its "Level 2 (Counties)"
+# label, which is wrong about what GADM level 2 contains.
+COUNTY_NAME_FIELD: Final[str] = "NAME_1"
+EXPECTED_COUNTY_COUNT: Final[int] = 47
 
 # Which age bands make up each summary indicator, given the band codes above.
 CHILDREN_UNDER_5_BANDS: Final[tuple[str, ...] | None] = None
 WORKING_AGE_BANDS: Final[tuple[str, ...] | None] = None
 ELDERLY_65PLUS_BANDS: Final[tuple[str, ...] | None] = None
 
-# Does total_population come from the published "t" rasters, or from summing the
-# "m" and "f" rasters? The two can differ slightly.
-TOTAL_POPULATION_SOURCE: Final[str | None] = None
+# DECIDED (Stage 2): totals are summed from the "m" and "f" rasters. The published
+# "t" rasters are still checked for existence (see DOWNLOAD_SEX_CODES) but are not
+# downloaded, which saves 100 files of transfer on a slow connection.
+TOTAL_POPULATION_SOURCE: Final[str] = "m+f"
 
 # Does the dashboard get a second long-format CSV (county x year x sex x age band)?
 # The required schema above carries neither sex nor age band, so the sex toggle and
