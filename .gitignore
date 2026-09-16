@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Cached source data: ~300 WorldPop rasters, far too large for the repo.
+# The pipeline re-downloads these on demand, so nothing is lost by excluding them.
+data/raw/*
+!data/raw/.gitkeep
+
+# Processed outputs and figures are deliberately NOT ignored -- the spec asks for
+# the datasets to be in the repository.
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+.ipynb_checkpoints/
+
+# Working notes, kept out of the repo for now at the author's request.
+# docs/ai_use.txt is a required deliverable (spec Part 0) and must be un-ignored
+# and committed before submission.
+docs/

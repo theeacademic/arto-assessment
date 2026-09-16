@@ -1,0 +1,22 @@
+# Floor-pinned: states a tested minimum without risking a resolver fight.
+# Install with:  pip install -r requirements.txt
+
+# HTTP / data access
+requests>=2.31
+
+# Tabular
+pandas>=2.2
+numpy>=1.26
+
+# Spatial
+geopandas>=1.0
+shapely>=2.0
+rasterio>=1.3
+rasterstats>=0.19
+
+# Static plots
+matplotlib>=3.8
+
+# Dashboard
+streamlit>=1.38
+plotly>=5.22
