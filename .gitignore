@@ -11,6 +11,10 @@ env/
 data/raw/*
 !data/raw/.gitkeep
 
+# The GADM boundary file is the exception: it is under 1 MB and the deployed
+# dashboard reads it directly, so it has to be in the repository.
+!data/raw/gadm41_KEN_2.json
+
 # Processed outputs and figures are deliberately NOT ignored -- the spec asks for
 # the datasets to be in the repository.
 
