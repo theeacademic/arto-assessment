@@ -18,7 +18,7 @@ import logging
 import sys
 from pathlib import Path
 
-from src import config, data_access, validation
+from src import aggregation, config, data_access, figures, validation
 from src.utils import build_logger, ensure_dir, log_section
 
 
@@ -109,6 +109,21 @@ def run_validation(raster_paths: list[Path], boundary_path: Path, logger: loggin
     validation.check_counties(boundaries, logger)
 
 
+def run_aggregation(raster_paths: list[Path], boundary_path: Path, logger: logging.Logger) -> None:
+    """Aggregate the rasters to counties and write the output CSVs.
+
+    Args:
+        raster_paths: Local raster paths from :func:`run_ingest`.
+        boundary_path: Local boundary file path from :func:`run_ingest`.
+        logger: Logger for the validation log.
+    """
+    counties = aggregation.load_counties(boundary_path, logger)
+    long_table = aggregation.aggregate_rasters(raster_paths, counties, logger)
+    indicators = aggregation.derive_indicators(long_table, logger)
+    aggregation.write_outputs(indicators, long_table, logger)
+    figures.make_all_figures(indicators, counties, logger)
+
+
 def main() -> int:
     """Run the pipeline end to end.
 
@@ -127,9 +142,11 @@ def main() -> int:
 
     raster_paths, boundary_path = run_ingest(logger)
     run_validation(raster_paths, boundary_path, logger)
+    run_aggregation(raster_paths, boundary_path, logger)
 
-    log_section(logger, "stage 2 complete")
+    log_section(logger, "pipeline complete")
     logger.info("%d rasters cached in %s", len(raster_paths), config.RAW_DIR)
+    logger.info("Dataset written to %s", config.PROCESSED_CSV_PATH)
     logger.info("Validation log written to %s", config.VALIDATION_LOG_PATH)
     return 0
 

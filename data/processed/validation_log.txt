@@ -1,64 +1,103 @@
-2026-09-16 09:46:39  INFO     Kenya population pipeline: WorldPop 2021, 2022, 2023, 2024, 2025 rasters to GADM counties
-2026-09-16 09:46:39  INFO     
-2026-09-16 09:46:39  INFO     ==============================================================================
-2026-09-16 09:46:39  INFO     DECISIONS RECORDED BEFORE THIS RUN
-2026-09-16 09:46:39  INFO     ==============================================================================
-2026-09-16 09:46:39  INFO     County unit: GADM field NAME_1 (47 counties). GADM level 2 holds constituencies, so level-2 polygons are dissolved to counties at the aggregation stage.
-2026-09-16 09:46:39  INFO     Total population source: m+f. All three sex codes are checked for existence; only f and m are downloaded.
-2026-09-16 09:46:39  INFO     Dataset: WorldPop Global 2015-2030 R2025A, 1km_ua/constrained, years 2021, 2022, 2023, 2024, 2025.
-2026-09-16 09:46:39  INFO     Pixel-value checks (negative, zero, implausible) are deferred to the aggregation stage, which already reads every raster once.
-2026-09-16 09:46:39  INFO     
-2026-09-16 09:46:39  INFO     ==============================================================================
-2026-09-16 09:46:39  INFO     DATA ACCESS
-2026-09-16 09:46:39  INFO     ==============================================================================
-2026-09-16 09:46:42  INFO     REST API listed 5 years: 2021 (60 files), 2022 (60 files), 2023 (60 files), 2024 (60 files), 2025 (60 files)
-2026-09-16 09:46:42  INFO     Discovered 300 candidate raster URLs across 5 years
-2026-09-16 09:46:55  INFO     Checked 300 URLs: 300 present, 0 absent
-2026-09-16 09:46:55  INFO     
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     FILE VALIDATION
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     Files confirmed present on server: 300
-2026-09-16 09:46:55  INFO     Filenames parsed into year/sex/age band: 300
-2026-09-16 09:46:55  INFO     Expected 300 combinations (5 years x 3 sexes x 20 age bands); found 300
-2026-09-16 09:46:55  INFO     All expected age-sex-year combinations are present.
-2026-09-16 09:46:55  INFO       2021: 60 files
-2026-09-16 09:46:55  INFO       2022: 60 files
-2026-09-16 09:46:55  INFO       2023: 60 files
-2026-09-16 09:46:55  INFO       2024: 60 files
-2026-09-16 09:46:55  INFO       2025: 60 files
-2026-09-16 09:46:55  INFO     
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     DOWNLOAD
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     Downloading 200 of 300 confirmed files (f and m only)
-2026-09-16 09:46:55  INFO       progress: 25/200 files
-2026-09-16 09:46:55  INFO       progress: 50/200 files
-2026-09-16 09:46:55  INFO       progress: 75/200 files
-2026-09-16 09:46:55  INFO       progress: 100/200 files
-2026-09-16 09:46:55  INFO       progress: 125/200 files
-2026-09-16 09:46:55  INFO       progress: 150/200 files
-2026-09-16 09:46:55  INFO       progress: 175/200 files
-2026-09-16 09:46:55  INFO       progress: 200/200 files
-2026-09-16 09:46:55  INFO     Rasters available: 200 (0 newly downloaded, 200 already cached, 298.5 MB on disk)
-2026-09-16 09:46:55  INFO     Boundaries already cached: gadm41_KEN_2.json (929.8 KB)
-2026-09-16 09:46:55  INFO     Loaded boundaries: 300 features from gadm41_KEN_2.json
-2026-09-16 09:46:55  INFO     
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     SPATIAL VALIDATION
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     Boundary CRS is EPSG:4326, as expected.
-2026-09-16 09:46:55  INFO     Sample raster ken_f_00_2021_CN_1km_R2025A_UA_v1.tif: CRS=EPSG:4326, size=959x1173, pixel=0.008333 deg, nodata=-99999.0
-2026-09-16 09:46:55  INFO     Rasters and boundaries share EPSG:4326. No reprojection required.
-2026-09-16 09:46:55  INFO     County name field: NAME_1
-2026-09-16 09:46:55  INFO     Distinct counties found: 47 (expected 47)
-2026-09-16 09:46:55  INFO     Sub-units in file: 300
-2026-09-16 09:46:55  INFO     All 47 counties are present.
-2026-09-16 09:46:55  WARNING  6 county names are run together as GADM publishes them (HomaBay, TaitaTaveta, TanaRiver, TransNzoia, UasinGishu, WestPokot). Left unchanged.
-2026-09-16 09:46:55  INFO     Counties: Baringo, Bomet, Bungoma, Busia, Elgeyo-Marakwet, Embu, Garissa, HomaBay, Isiolo, Kajiado, Kakamega, Kericho, Kiambu, Kilifi, Kirinyaga, Kisii, Kisumu, Kitui, Kwale, Laikipia, Lamu, Machakos, Makueni, Mandera, Marsabit, Meru, Migori, Mombasa, Murang'a, Nairobi, Nakuru, Nandi, Narok, Nyamira, Nyandarua, Nyeri, Samburu, Siaya, TaitaTaveta, TanaRiver, Tharaka-Nithi, TransNzoia, Turkana, UasinGishu, Vihiga, Wajir, WestPokot
-2026-09-16 09:46:55  INFO     
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     STAGE 2 COMPLETE
-2026-09-16 09:46:55  INFO     ==============================================================================
-2026-09-16 09:46:55  INFO     200 rasters cached in /home/kelly/arto-assessment/data/raw
-2026-09-16 09:46:55  INFO     Validation log written to /home/kelly/arto-assessment/data/processed/validation_log.txt
+2026-09-16 09:58:51  INFO     Kenya population pipeline: WorldPop 2021, 2022, 2023, 2024, 2025 rasters to GADM counties
+2026-09-16 09:58:51  INFO     
+2026-09-16 09:58:51  INFO     ==============================================================================
+2026-09-16 09:58:51  INFO     DECISIONS RECORDED BEFORE THIS RUN
+2026-09-16 09:58:51  INFO     ==============================================================================
+2026-09-16 09:58:51  INFO     County unit: GADM field NAME_1 (47 counties). GADM level 2 holds constituencies, so level-2 polygons are dissolved to counties at the aggregation stage.
+2026-09-16 09:58:51  INFO     Total population source: m+f. All three sex codes are checked for existence; only f and m are downloaded.
+2026-09-16 09:58:51  INFO     Dataset: WorldPop Global 2015-2030 R2025A, 1km_ua/constrained, years 2021, 2022, 2023, 2024, 2025.
+2026-09-16 09:58:51  INFO     Pixel-value checks (negative, zero, implausible) are deferred to the aggregation stage, which already reads every raster once.
+2026-09-16 09:58:51  INFO     
+2026-09-16 09:58:51  INFO     ==============================================================================
+2026-09-16 09:58:51  INFO     DATA ACCESS
+2026-09-16 09:58:51  INFO     ==============================================================================
+2026-09-16 09:58:54  INFO     REST API listed 5 years: 2021 (60 files), 2022 (60 files), 2023 (60 files), 2024 (60 files), 2025 (60 files)
+2026-09-16 09:58:54  INFO     Discovered 300 candidate raster URLs across 5 years
+2026-09-16 09:59:06  INFO     Checked 300 URLs: 300 present, 0 absent
+2026-09-16 09:59:06  INFO     
+2026-09-16 09:59:06  INFO     ==============================================================================
+2026-09-16 09:59:06  INFO     FILE VALIDATION
+2026-09-16 09:59:06  INFO     ==============================================================================
+2026-09-16 09:59:06  INFO     Files confirmed present on server: 300
+2026-09-16 09:59:06  INFO     Filenames parsed into year/sex/age band: 300
+2026-09-16 09:59:06  INFO     Expected 300 combinations (5 years x 3 sexes x 20 age bands); found 300
+2026-09-16 09:59:06  INFO     All expected age-sex-year combinations are present.
+2026-09-16 09:59:06  INFO       2021: 60 files
+2026-09-16 09:59:06  INFO       2022: 60 files
+2026-09-16 09:59:06  INFO       2023: 60 files
+2026-09-16 09:59:06  INFO       2024: 60 files
+2026-09-16 09:59:06  INFO       2025: 60 files
+2026-09-16 09:59:06  INFO     
+2026-09-16 09:59:06  INFO     ==============================================================================
+2026-09-16 09:59:06  INFO     DOWNLOAD
+2026-09-16 09:59:06  INFO     ==============================================================================
+2026-09-16 09:59:06  INFO     Downloading 200 of 300 confirmed files (f and m only)
+2026-09-16 09:59:06  INFO       progress: 25/200 files
+2026-09-16 09:59:06  INFO       progress: 50/200 files
+2026-09-16 09:59:06  INFO       progress: 75/200 files
+2026-09-16 09:59:06  INFO       progress: 100/200 files
+2026-09-16 09:59:06  INFO       progress: 125/200 files
+2026-09-16 09:59:06  INFO       progress: 150/200 files
+2026-09-16 09:59:06  INFO       progress: 175/200 files
+2026-09-16 09:59:06  INFO       progress: 200/200 files
+2026-09-16 09:59:06  INFO     Rasters available: 200 (0 newly downloaded, 200 already cached, 298.5 MB on disk)
+2026-09-16 09:59:06  INFO     Boundaries already cached: gadm41_KEN_2.json (929.8 KB)
+2026-09-16 09:59:06  INFO     Loaded boundaries: 300 features from gadm41_KEN_2.json
+2026-09-16 09:59:06  INFO     
+2026-09-16 09:59:06  INFO     ==============================================================================
+2026-09-16 09:59:06  INFO     SPATIAL VALIDATION
+2026-09-16 09:59:06  INFO     ==============================================================================
+2026-09-16 09:59:06  INFO     Boundary CRS is EPSG:4326, as expected.
+2026-09-16 09:59:06  INFO     Sample raster ken_f_00_2021_CN_1km_R2025A_UA_v1.tif: CRS=EPSG:4326, size=959x1173, pixel=0.008333 deg, nodata=-99999.0
+2026-09-16 09:59:06  INFO     Rasters and boundaries share EPSG:4326. No reprojection required.
+2026-09-16 09:59:06  INFO     County name field: NAME_1
+2026-09-16 09:59:06  INFO     Distinct counties found: 47 (expected 47)
+2026-09-16 09:59:06  INFO     Sub-units in file: 300
+2026-09-16 09:59:06  INFO     All 47 counties are present.
+2026-09-16 09:59:06  WARNING  6 county names are run together as GADM publishes them (HomaBay, TaitaTaveta, TanaRiver, TransNzoia, UasinGishu, WestPokot). Left unchanged.
+2026-09-16 09:59:06  INFO     Counties: Baringo, Bomet, Bungoma, Busia, Elgeyo-Marakwet, Embu, Garissa, HomaBay, Isiolo, Kajiado, Kakamega, Kericho, Kiambu, Kilifi, Kirinyaga, Kisii, Kisumu, Kitui, Kwale, Laikipia, Lamu, Machakos, Makueni, Mandera, Marsabit, Meru, Migori, Mombasa, Murang'a, Nairobi, Nakuru, Nandi, Narok, Nyamira, Nyandarua, Nyeri, Samburu, Siaya, TaitaTaveta, TanaRiver, Tharaka-Nithi, TransNzoia, Turkana, UasinGishu, Vihiga, Wajir, WestPokot
+2026-09-16 09:59:07  INFO     Dissolved 300 level-2 polygons into 47 counties.
+2026-09-16 09:59:07  INFO     
+2026-09-16 09:59:07  INFO     ==============================================================================
+2026-09-16 09:59:07  INFO     AGGREGATION
+2026-09-16 09:59:07  INFO     ==============================================================================
+2026-09-16 09:59:07  INFO     Rasterized 47 counties onto the 1173x959 grid: 685941 of 1124907 pixels fall in a county.
+2026-09-16 09:59:15  INFO     
+2026-09-16 09:59:15  INFO     ==============================================================================
+2026-09-16 09:59:15  INFO     DATA QUALITY CHECKS
+2026-09-16 09:59:15  INFO     ==============================================================================
+2026-09-16 09:59:15  INFO     Rasters screened: 200
+2026-09-16 09:59:15  INFO     Nodata pixels excluded from all sums: 166481360 (marker -99999.0)
+2026-09-16 09:59:15  INFO     Valid pixels summed: 58500040
+2026-09-16 09:59:15  INFO     Valid pixels exactly zero: 14984 (0.03% of valid) -- expected across Kenya's unpopulated arid north and protected areas.
+2026-09-16 09:59:15  INFO     Genuine negative population values found: 0. Nothing was repaired because nothing needed repair.
+2026-09-16 09:59:16  INFO     Cross-check on ken_f_00_2021_CN_1km_R2025A_UA_v1.tif (rasterize+bincount vs rasterstats):
+2026-09-16 09:59:16  INFO       national total: 698857.2 vs 699074.7 (difference -217.5, -0.0311%)
+2026-09-16 09:59:16  INFO       largest single-county difference: Kiambu, 34585.7 vs 34698.4
+2026-09-16 09:59:16  INFO       a difference of this size is edge pixels, where the two methods disagree about which county a boundary pixel belongs to.
+2026-09-16 09:59:16  INFO     Aggregated 200 rasters into 9400 county-year-sex-band rows.
+2026-09-16 09:59:16  INFO     
+2026-09-16 09:59:16  INFO     ==============================================================================
+2026-09-16 09:59:16  INFO     DERIVED INDICATORS
+2026-09-16 09:59:16  INFO     ==============================================================================
+2026-09-16 09:59:16  INFO     Built 235 indicator rows (47 counties x 5 years).
+2026-09-16 09:59:16  INFO     
+2026-09-16 09:59:16  INFO     ==============================================================================
+2026-09-16 09:59:16  INFO     OUTPUTS
+2026-09-16 09:59:16  INFO     ==============================================================================
+2026-09-16 09:59:16  INFO     Wrote kenya_population_by_county.csv: 235 rows, columns county, year, total_population, children_under_5, working_age, elderly_65plus, sex_ratio, dependency_ratio, child_dependency_ratio, elderly_dependency_ratio, pct_children, pct_elderly
+2026-09-16 09:59:16  INFO     Wrote kenya_population_by_county_age_sex.csv: 9400 rows (county x year x sex x age band), for the dashboard's sex toggle and age pyramid.
+2026-09-16 09:59:16  INFO     
+2026-09-16 09:59:16  INFO     ==============================================================================
+2026-09-16 09:59:16  INFO     FIGURES
+2026-09-16 09:59:16  INFO     ==============================================================================
+2026-09-16 09:59:19  INFO     Figure 1: raster_map_2025_female_under5.png (bands 00+01, sex f, 2025)
+2026-09-16 09:59:19  INFO     Figure 2: national_population_2021_2025.png (52.6M in 2021 rising to 56.9M in 2025)
+2026-09-16 09:59:19  INFO     Figure 3: children_under5_vs_county_area_2025.png (areas 267-75778 km², Pearson r = -0.102 between area and children under 5)
+2026-09-16 09:59:19  INFO     
+2026-09-16 09:59:19  INFO     ==============================================================================
+2026-09-16 09:59:19  INFO     PIPELINE COMPLETE
+2026-09-16 09:59:19  INFO     ==============================================================================
+2026-09-16 09:59:19  INFO     200 rasters cached in /home/kelly/arto-assessment/data/raw
+2026-09-16 09:59:19  INFO     Dataset written to /home/kelly/arto-assessment/data/processed/kenya_population_by_county.csv
+2026-09-16 09:59:19  INFO     Validation log written to /home/kelly/arto-assessment/data/processed/validation_log.txt

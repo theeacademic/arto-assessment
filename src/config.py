@@ -85,17 +85,41 @@ CSV_COLUMNS: Final[tuple[str, ...]] = (
 COUNTY_NAME_FIELD: Final[str] = "NAME_1"
 EXPECTED_COUNTY_COUNT: Final[int] = 47
 
-# Which age bands make up each summary indicator, given the band codes above.
-CHILDREN_UNDER_5_BANDS: Final[tuple[str, ...] | None] = None
-WORKING_AGE_BANDS: Final[tuple[str, ...] | None] = None
-ELDERLY_65PLUS_BANDS: Final[tuple[str, ...] | None] = None
+# DECIDED (Stage 3): the spec-literal mapping of its wording onto WorldPop's bands.
+# "Children under 5" is bands 00 (ages 0-1) and 01 (ages 1-4); "working age (15-64)"
+# is 15-19 through 60-64; "elderly (65+)" is 65-69 upward including the open-ended
+# 90+ band. Together with ages 5-14 these partition the total exactly once.
+CHILDREN_UNDER_5_BANDS: Final[tuple[str, ...]] = ("00", "01")
+WORKING_AGE_BANDS: Final[tuple[str, ...]] = (
+    "15", "20", "25", "30", "35", "40", "45", "50", "55", "60",
+)
+ELDERLY_65PLUS_BANDS: Final[tuple[str, ...]] = ("65", "70", "75", "80", "85", "90")
 
 # DECIDED (Stage 2): totals are summed from the "m" and "f" rasters. The published
 # "t" rasters are still checked for existence (see DOWNLOAD_SEX_CODES) but are not
 # downloaded, which saves 100 files of transfer on a slow connection.
 TOTAL_POPULATION_SOURCE: Final[str] = "m+f"
 
-# Does the dashboard get a second long-format CSV (county x year x sex x age band)?
-# The required schema above carries neither sex nor age band, so the sex toggle and
-# the age pyramid cannot be built from it alone.
-LONG_FORMAT_CSV_PATH: Final[Path | None] = None
+# DECIDED (Stage 3): yes. The required schema above carries neither sex nor age band,
+# so the dashboard's sex toggle and age pyramid cannot be built from it. A long-format
+# companion file is written alongside it, leaving the required CSV exactly as specified.
+LONG_FORMAT_CSV_PATH: Final[Path] = PROCESSED_DIR / "kenya_population_by_county_age_sex.csv"
+LONG_CSV_COLUMNS: Final[tuple[str, ...]] = ("county", "year", "sex", "age_band", "population")
+
+# --- Aggregation settings ----------------------------------------------------
+# Zonal sums are computed by rasterizing the counties to a label grid once and then
+# running np.bincount over each raster: measured at 3.3s for all 200 rasters versus
+# 2.5 minutes for rasterstats. One raster is additionally summed with rasterstats as
+# an independent cross-check, and the agreement is written to the validation log.
+CROSS_CHECK_WITH_RASTERSTATS: Final[bool] = True
+
+# A genuine negative population value is a data defect, unlike the -99999 nodata
+# marker. Nodata is masked out of every sum; if any true negative survives that mask
+# the run halts and reports rather than summing it.
+HALT_ON_NEGATIVE_VALUES: Final[bool] = True
+
+# Presentation only: population counts are rounded to whole people and ratios and
+# percentages to two decimals in the output CSVs. Change these to alter the CSV
+# formatting without touching any of the arithmetic.
+COUNT_DECIMALS: Final[int] = 0
+RATIO_DECIMALS: Final[int] = 2
