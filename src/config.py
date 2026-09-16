@@ -123,3 +123,29 @@ HALT_ON_NEGATIVE_VALUES: Final[bool] = True
 # formatting without touching any of the arithmetic.
 COUNT_DECIMALS: Final[int] = 0
 RATIO_DECIMALS: Final[int] = 2
+
+
+# --- Dashboard display --------------------------------------------------------
+# Readable labels for the WorldPop band codes, youngest first. Band 00 is ages 0-1,
+# band 01 is ages 1-4, and band 90 is open-ended.
+AGE_BAND_LABELS: Final[dict[str, str]] = {
+    "00": "0-1",
+    "01": "1-4",
+    **{band: f"{int(band)}-{int(band) + 4}" for band in AGE_BANDS[2:-1]},
+    "90": "90+",
+}
+
+# The seven indicators the spec lists for the dashboard dropdown. The three counts can
+# be recomputed for one sex from the long-format file; the four ratios cannot be split
+# by sex in any meaningful way, so the sex toggle is disabled while one is selected.
+COUNT_INDICATORS: Final[dict[str, tuple[str, tuple[str, ...]]]] = {
+    "Total population": ("total_population", AGE_BANDS),
+    "Children under 5": ("children_under_5", CHILDREN_UNDER_5_BANDS),
+    "Elderly 65+": ("elderly_65plus", ELDERLY_65PLUS_BANDS),
+}
+RATIO_INDICATORS: Final[dict[str, str]] = {
+    "Dependency ratio": "dependency_ratio",
+    "Sex ratio": "sex_ratio",
+    "Child dependency ratio": "child_dependency_ratio",
+    "Elderly dependency ratio": "elderly_dependency_ratio",
+}
