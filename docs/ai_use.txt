@@ -1,0 +1,171 @@
+AI USE DISCLOSURE
+Kenya population by county, 2021-2025 — AHADI technical assessment
+Kelly Nyawira, 16 September 2026
+
+
+WHICH TOOL
+-----------
+Claude (Anthropic), used through Claude Code in my terminal. No other AI tool was
+used. Claude wrote most of the Python in this repository, and it drafted this README
+and this log. The analysis decisions were mine, and I have recorded below what I was
+asked and what I chose, because those choices are the part that matters.
+
+
+HOW I WORKED WITH IT
+--------------------
+I did not hand it the brief and ask for a solution. I set the ground rules up front:
+work in four stages and stop after each one for my go-ahead; before writing code for
+a stage, give me two or three options with tradeoffs and let me pick; never decide for
+me; flag ambiguities in the brief instead of resolving them; never silently repair
+data; and write plain-English notes after each stage so I can explain the code.
+
+That structure is why this log is mostly a list of decisions rather than a list of
+features. Claude did the typing and the measuring. I did the choosing.
+
+
+MY PROMPTS, BY SECTION
+----------------------
+
+Setting up. My opening prompt gave the rules above, pointed at the brief, and set the
+scope: Kenya only, WorldPop 1 km age and sex rasters 2021-2025, aggregated to GADM
+boundaries, plus a Streamlit dashboard. I asked it to read the spec and report back in
+ten bullets what was required, flagging anything ambiguous rather than resolving it. I
+also told it explicitly not to write the README, the interpretation section, the
+public-health commentary or the policy implications.
+
+Stage 1, scaffold. "go ahead with stage 1". I asked for the repo structure, a
+requirements.txt, a .gitignore and empty module stubs with docstrings only. No logic.
+
+Stage 2, ingest and validate. "go ahead with stage 2". Programmatic download with
+on-disk caching, a filename parser for year, sex and age band, a check that every
+expected age-sex-year combination is present, CRS checks on rasters and boundaries,
+negative and zero value checks, everything written to a validation log, nothing
+silently repaired.
+
+Stage 3, aggregate. "go ahead with stage 3". Zonal sums per polygon per age-sex-year,
+the derived indicators exactly as named in the brief, written to the exact CSV schema
+specified, then the three static plots.
+
+Stage 4, dashboard. "go". Streamlit, reading only the processed CSV plus boundaries.
+Filters for year, sex, indicator and optional county. Two visualisations only, a
+choropleth and an age pyramid. Plain layout.
+
+Deployment. "shut down the local server and tell me how to deploy this to streamlit",
+then "un-ignore the gadm file and keep one requirements.txt or do whatever is
+recommended to enable the deployment".
+
+Documentation. "write a human made readme.md and ai usage log in docs also in human
+based form/language include prompts for different sections and what ai handled make it
+minimal". This reversed my earlier instruction that the README was mine to write, so
+Claude drafted it and I edited it. I am noting that here rather than leaving it
+implied.
+
+
+WHAT I DECIDED, STAGE BY STAGE
+------------------------------
+
+Reading the brief. Claude came back with ten bullets and eight ambiguities. Two were
+substantive and I left both open rather than let it pick. The brief says
+"unconstrained" but gives a path ending in "constrained"; and it calls GADM level 2
+"counties" when level 2 is actually 300 constituencies and the 47 counties live in a
+different field.
+
+Stage 1. It offered me the brief's example tree verbatim, a leaner tree, or the lean
+tree plus a config module. I took the last one. I did not want empty test files I had
+no intention of filling, and I wanted the URL pattern and age bands stated once so the
+decisions I had not yet made would sit in a single reviewable place. It left five
+constants set to None with the open question written next to each. On dependencies I
+chose floor pins over exact pins, because a resolver conflict during a timed exercise
+is a worse risk than a loose minimum.
+
+Stage 2. Before offering options it timed an actual download and told me a sequential
+fetch of all 300 files would take about 87 minutes, roughly half my budget. That
+changed what I chose. I had it verify all 300 files exist with cheap HEAD requests but
+download only the 200 male and female ones, so I could honestly say the completeness
+check covered the full set without paying to transfer a third of it. For URL discovery
+I chose the REST API with a fallback to a constructed pattern, so a third-party outage
+could not stop a timed run. For the county question I chose GADM's NAME_1 field and
+47 counties, treating the brief's "Level 2 (Counties)" label as an error in the brief.
+I also chose to defer the pixel-value checks to the aggregation stage, since that
+stage has to read every raster anyway.
+
+Stage 3. Claude benchmarked two approaches rather than guessing: rasterstats at about
+two and a half minutes for 200 rasters, against rasterizing the counties once and
+using numpy at about three seconds. I took the fast one but asked for one raster to be
+re-summed with rasterstats as an independent check, with the agreement written into
+the validation log. They agree to within 0.03%, which is pixels on county boundaries.
+On nodata I insisted the -99999 marker and a genuinely negative population be treated
+as different problems: mask the first, halt on the second. There were no genuine
+negatives. I confirmed the age band groupings and chose to write a second long-format
+CSV, because the required schema carries no sex and no age band and the dashboard
+needed both.
+
+Stage 4. The sex toggle was the interesting decision. Three of the seven required
+indicators are counts that can be split by sex; the other four are ratios that cannot,
+since a sex ratio is males divided by females and there is no such thing as one for
+males alone. I chose to disable the toggle with a short explanation rather than return
+a number that looks meaningful but is not. I also chose a plain projection over a
+street basemap, and both a dropdown and click-on-map for selecting counties.
+
+Deployment. Claude found a problem I had missed: the dashboard reads the GADM file,
+but that file sat inside a gitignored folder, so a deploy would have started and then
+crashed. I chose to un-ignore that single file and keep one requirements.txt, at the
+cost of a slower cloud build.
+
+
+HOW I CHECKED THE CODE
+----------------------
+I read every file before running it, and I checked its claims against things I could
+verify independently rather than taking its word.
+
+I confirmed the WorldPop REST API really does list 60 files per year for Kenya under
+the path the brief hints at, and that the GADM file really does contain 300
+constituency features with 47 distinct county names.
+
+On the outputs, I checked the numbers against reality. National totals run from 52.6
+million in 2021 to 56.9 million in 2025, which is the right order against the 47.6
+million counted in the 2019 census. Nairobi's computed area came out at about 700
+square kilometres against an actual 696. The arithmetic identity holds: under-fives
+plus working age plus over-65s plus ages 5 to 14 equals the total, to within two
+people across all 235 county-years. The sex splits go the way demography says they
+should, with more boys than girls under five and substantially more women than men
+over 65. I opened all three figures and confirmed the raster map is recognisably
+Kenya, with the dense western highlands, the Nairobi hotspot and the empty arid north.
+
+For the dashboard I ran it through Streamlit's own headless test harness rather than
+just clicking around: it runs with no exception, both charts render, the sex toggle
+disables when a ratio is selected, and changing the year or county updates both
+panels. For the deployment fix I had it rebuild exactly what a fresh clone would
+contain, with no rasters and no virtual environment, and run the app there. It worked,
+which is the check that actually proves the deploy will hold.
+
+Two defects surfaced that way and were fixed: a deprecated Streamlit argument that
+warned on every render, and the gitignored boundary file described above.
+
+
+A LATE ADDITION
+---------------
+After the four stages I asked for a small test script to validate the reproducibility
+claims in the README, and told Claude to keep it simple. I chose two constraints: no
+pytest, so requirements.txt does not grow, and it must validate only the committed
+files so it runs on a fresh clone without downloading 300 MB of rasters first.
+
+It produced tests/test_reproducibility.py, which checks the CSV schema and row counts,
+the county names against the boundary file, that the age groups sum back to the total,
+that every ratio recomputes from its own components, that the two CSVs agree, and that
+the national totals quoted in the README are what the data holds. Twenty-seven checks
+pass with the raster cache present, twenty-four with two skipped without it.
+
+I asked it to prove the test could actually fail, since a test that cannot fail proves
+nothing. It corrupted one county's working-age figure in a throwaway copy and confirmed
+four checks failed and the script exited non-zero.
+
+
+WHAT IS MINE
+------------
+The choice of approach at every stage, the resolution of the brief's contradictions,
+the insistence that nodata and negative values are different problems, the decision to
+disable rather than fake the sex toggle, and the interpretation of what the numbers
+mean. The observation that the brief's dependency ratio is not the conventional one,
+and therefore produces values near 20 to 40 rather than the published figure near 70,
+is mine and matters for anyone reading the output.

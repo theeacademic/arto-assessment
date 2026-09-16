@@ -24,7 +24,3 @@ data/raw/*
 .DS_Store
 .ipynb_checkpoints/
 
-# Working notes, kept out of the repo for now at the author's request.
-# docs/ai_use.txt is a required deliverable (spec Part 0) and must be un-ignored
-# and committed before submission.
-docs/
